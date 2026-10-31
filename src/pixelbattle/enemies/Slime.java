@@ -2,20 +2,22 @@ package pixelbattle.enemies;
 
 import pixelbattle.core.Enemy;
 import pixelbattle.core.Skill;
-import pixelbattle.core.Target;
 import pixelbattle.engine.Sprite;
+import pixelbattle.core.Target;
 
-/** Слиз — слабкий, але живучий. */
 public class Slime extends Enemy {
-
     public Slime() {
-        super("Слиз", 60, new Sprite("swampy_anim", 4, 6));
+        super("Слиз", 60, new Sprite("swampy_anim", 4, 4));
 
-        addSkill(new Skill("Стрибок", Target.ENEMY, 0, (user, target) ->
-                user.getName() + " стрибає на " + target.getName() + ": "
-                        + target.takeDamage(random(5, 9)) + " шкоди"));
+        addSkill(new Skill("Стрибок", Target.ENEMY, 0, (user, target) -> {
+            int dmg = target.takeDamage(random(5, 9));
+            return user.getName() + " стрибає на " + target.getName() + ": " + dmg + " шкоди";
+        }));
     }
 
-    // TODO 6: пасивка «Регенерація» — перевизначте onTurnStart():
-    //   на початку кожного свого ходу слиз лікується на 6 (heal(6)).
+    // TODO 6: пасивка «Регенерація»
+    @Override
+    protected void onTurnStart() {
+        heal(6);
+    }
 }
